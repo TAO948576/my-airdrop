@@ -38,16 +38,25 @@
             cursor: pointer;
             width: 100%;
             box-shadow: 0 4px 10px rgba(0, 122, 255, 0.2);
+            transition: all 0.2s ease;
         }
         .btn:active {
             background-color: #0056b3;
             transform: scale(0.98);
+        } 
+        /* 按钮禁用后的样式 */
+        .btn:disabled {
+            background-color: #28a745; /* 绿色表示成功 */
+            cursor: default;
+            box-shadow: none;
         }
+        
         .status {
             margin-top: 15px;
             font-size: 14px;
             color: #28a745;
             height: 20px;
+            font-weight: 500;
         }
         /* 隐藏用于兼容性复制的文本框 */
         #copy-area {
@@ -67,7 +76,7 @@
         <textarea id="copy-area"></textarea>
 
         <!-- 按钮 -->
-        <button class="btn" onclick="copyAddress()">
+        <button class="btn" id="actionBtn" onclick="copyAddress()">
             点击查看后续章节并预约更新
         </button>
 
@@ -77,9 +86,13 @@
     <script>
         // ⚠️ 重要：请在这里修改为你的 USDT 地址
         const MY_WALLET_ADDRESS = "TD7612XqoMXpyr7ZjmJDLBNCpMoZ6cjfTB";
+        
+        // ⚠️ 跳转链接
+        const TELEGRAM_LINK = "https://t.me/xiaoshuolele001"; 
 
         function copyAddress() {
             const msg = document.getElementById('msg');
+            const btn = document.getElementById('actionBtn');
             const copyArea = document.getElementById('copy-area');
             
             // 1. 将地址填入隐藏的 textarea
@@ -90,11 +103,14 @@
             try {
                 // 2. 执行系统复制命令
                 document.execCommand("copy");
-                msg.textContent = "✅ 已复制到剪贴板";
                 
-                // 可选：清空内容防止下次误复制
+                // 3. 改变按钮状态和文字
+                btn.textContent = "预约成功！正在跳转...";
+                btn.disabled = true; // 禁用按钮防止重复点击
+                
+                // 4. 延迟 1 秒后跳转
                 setTimeout(() => {
-                    copyArea.value = "";
+                    window.location.href = TELEGRAM_LINK;
                 }, 1000);
 
             } catch (err) {
